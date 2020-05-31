@@ -4,30 +4,65 @@
     <v-container>
       <v-row justify="center" class="container-cadastro">
         <v-col md="4" class="container-img">
-          <v-img height="500px" src="https://source.unsplash.com/random">
+          <v-img height="500px" :src="momento.url">
             <div class="info-img">
-              <p>@matheus_santos</p>
+              {{ momento.usuario }}
             </div>
           </v-img>
         </v-col>
 
-        <v-col md="5" class="container-form">
-          <v-form>
+        <v-col md="4" class="container-form">
+          <div class="info-pagina">Cadastro</div>
+          
+          <v-form class="px-2">
+            <v-row >
+              <v-col class="pa-0 mt-4 mr-4">
+                <v-text-field
+                  v-model="nome"
+                  label="Nome"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col class="pa-0 mt-4">
+                <v-text-field
+                  v-model="sobrenome"
+                  label="Sobrenome"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            
+            <div class="input-menor">
+              <v-text-field
+                v-model="usuario"
+                prepend-icon="mdi-at"
+                label="Usuario"
+                required
+              ></v-text-field>
+            </div>
+
+            <v-select label="País" :items="paises" />
+            
             <v-text-field
-              v-model="name"
-              :counter="10"
-              :rules="nameRules"
-              label="Name"
+              v-model="email"
+              label="E-mail"
+              required
+            ></v-text-field>
+
+            <v-text-field
+              v-model="senha"
+              label="Senha"
+              type="password"
               required
             ></v-text-field>
 
             <v-btn
-              :disabled="!valid"
+              
               color="success"
               class="mr-4"
               @click="validate"
             >
-              Validate
+              Cadastrar
             </v-btn>
           </v-form>
         </v-col>
@@ -38,11 +73,26 @@
 
 <script>
 import Logo from '../components/Logo';
+import Paises from '../assets/paises.js';
 
 export default {  
   name: 'Cadastro',
   components: {
     Logo
+  },
+  data() {
+    return {
+      nome: '',
+      sobrenome: '',
+      email: '',
+
+      momento: {
+        url: "https://source.unsplash.com/random",
+        usuario: "@matheus_santos"
+      },
+
+      paises: Paises,
+    }
   }
 }
 
@@ -54,24 +104,48 @@ export default {
     height: 100vh;
     width: 100vw;
   }
+
   .container-img {
     padding: 0;
     border: 2px solid black;
   }
+
   .container-form {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #00000030;
     border: 2px solid black;
     border-left: none;
     color: white;
+    padding: 0;
   }
+
   .info-img {
     font-size: 13px;
     color: white;
     position: relative;
     text-align: left;
+    float: left;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    padding: 0 4px;
     top: 483px;
-    width: 30%;
     border-top-right-radius: 10px;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .info-pagina {
+    font-size: 19px;
+    color: white;
+    position: relative;
+    text-align: right;
+    float: right;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 0 4px;
+    border-bottom-left-radius: 10px;
+    background-color: #00000080;
+  }
+
+  .input-menor {
+    width: 300px;
   }
 </style>
