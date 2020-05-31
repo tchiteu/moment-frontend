@@ -1,5 +1,6 @@
 <template>
   <v-app class="background">
+    <Logo />
     <v-container>
       <v-row justify="center" class="container-cadastro">
         <v-col md="4" class="container-img">
@@ -32,13 +33,17 @@
         </v-col>
       </v-row>
     </v-container>
-  
   </v-app>
 </template>
 
 <script>
-export default {
+import Logo from '../components/Logo';
+
+export default {  
   name: 'Cadastro',
+  components: {
+    Logo
+  }
 }
 
 </script>
