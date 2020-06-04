@@ -1,42 +1,36 @@
 <template>
-  <v-app class="background">
-    <Logo />
-    <v-container>
-      <v-row justify="center" class="container-cadastro">
-        <v-col md="4" class="container-img">
-          <v-img height="500px" :src="momento.url">
-            <div class="info-img">
-              {{ momento.usuario }}
-            </div>
-          </v-img>
-        </v-col>
+  <v-app>
+    <v-row justify="center">
+      <v-col 
+        v-if="breakpoint != 'xs' && 'sm'"
+        md="5"
+        class="pa-0"
+      >
+        <v-img class="container-img" :src="momento.imagem">
+          <div class="info-img">
+            {{ momento.usuario }}
+          </div>
+        </v-img>
+      </v-col>
 
-        <v-col md="4" class="container-form">
-          <div class="info-pagina">Cadastro</div>
-          
-          <v-form class="px-2">
-            <v-row >
-              <v-col class="pa-0 mt-4 mr-4">
-                <v-text-field
-                  v-model="nome"
-                  label="Nome"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col class="pa-0 mt-4">
-                <v-text-field
-                  v-model="sobrenome"
-                  label="Sobrenome"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
+      <v-col md="7" xs="12" class="container-form">
+        <Logo class="mt-2" color="black" fontSize="40px" />
+        
+        <v-card outlined class="card-form">
+          <h3 class="pt-4">Cadastro</h3>
+          <v-form class="px-12">
             
-            <div class="input-menor">
+            <v-text-field
+              v-model="nome"
+              label="Nome Completo"
+              required
+            ></v-text-field>
+          
+            <div>
               <v-text-field
                 v-model="usuario"
                 prepend-icon="mdi-at"
-                label="Usuario"
+                label="Usuário"
                 required
               ></v-text-field>
             </div>
@@ -55,19 +49,24 @@
               type="password"
               required
             ></v-text-field>
-
-            <v-btn
-              
-              color="success"
-              class="mr-4"
-              @click="validate"
-            >
-              Cadastrar
-            </v-btn>
           </v-form>
-        </v-col>
-      </v-row>
-    </v-container>
+
+          <v-btn
+            color="success"
+            class="mb-3"
+          >
+            Cadastrar
+          </v-btn>
+        </v-card>
+        
+        <v-card outlined class="card-links py-2">
+          <router-link to="/recuperar">Esqueci minha senha</router-link>
+          {{ '•' }}
+          <router-link to="/login">Já tenho uma conta</router-link>
+        </v-card>
+
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
@@ -83,70 +82,64 @@ export default {
   data() {
     return {
       nome: '',
-      sobrenome: '',
+      usuario: '',
       email: '',
+      senha: '',
 
       momento: {
-        url: "https://source.unsplash.com/random",
+        imagem: "https://source.unsplash.com/random/600x800",
         usuario: "@matheus_santos"
       },
 
       paises: Paises,
     }
+  },
+  computed: {
+    breakpoint() {
+      return this.$vuetify.breakpoint.name;
+    }
   }
 }
-
 </script>
 
 <style scoped>
-  .background {
-    background-color: #6F68BF;
-    background-image: url('../assets/background.jpg');
-    height: 100vh;
-    width: 100vw;
+  .card-form {
+    max-width: 60%;
+    min-width: 300px;
+    margin: 40px auto 10px auto;
+    background-color: white;
   }
 
   .container-img {
-    padding: 0;
-    border: 1px solid #000;
+    max-height: 100vh;
   }
 
   .container-form {
-    background-color: #00000010;
-    border: 1px solid #000;
-    border-left: none;
-    background-color: white;
+    border-left: 1px solid black;
+    background-color: #f9f9f9;
     padding: 0;
   }
 
   .info-img {
-    font-size: 13px;
+    font-size: 1vw;
     color: white;
     position: relative;
-    text-align: left;
     float: left;
     border-right: 1px solid #000;
-    border-top: 1px solid #000;
-    padding: 0 4px;
-    top: 483px;
-    border-top-right-radius: 10px;
+    border-bottom: 1px solid #000;
+    padding: 0 20px;
+    border-bottom-right-radius: 10px;
     background-color: rgba(0, 0, 0, 0.8);
   }
 
-  .info-pagina {
-    font-size: 19px;
-    color: white;
-    position: relative;
-    text-align: right;
-    float: right;
-    border-left: 1px solid #ffffff;
-    border-bottom: 1px solid #ffffff;
-    padding: 0 4px;
-    border-bottom-left-radius: 10px;
-    background-color: #00000080;
+  .card-links {
+    max-width: 60%;
+    min-width: 300px;
+    margin: auto;
+    background-color: #f9f9f9;
   }
 
-  .input-menor {
-    width: 300px;
+  a {
+    text-decoration: none;
   }
 </style>
