@@ -60,8 +60,6 @@
         </v-card>
         
         <v-card outlined class="card-links py-2">
-          <router-link to="/recuperar">Esqueci minha senha</router-link>
-          {{ '•' }}
           <router-link to="/login">Já tenho uma conta</router-link>
         </v-card>
 
