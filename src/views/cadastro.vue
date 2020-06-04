@@ -101,20 +101,21 @@ export default {
 <style scoped>
   .background {
     background-color: #6F68BF;
+    background-image: url('../assets/background.jpg');
     height: 100vh;
     width: 100vw;
   }
 
   .container-img {
     padding: 0;
-    border: 2px solid black;
+    border: 1px solid #000;
   }
 
   .container-form {
-    background-color: #00000030;
-    border: 2px solid black;
+    background-color: #00000010;
+    border: 1px solid #000;
     border-left: none;
-    color: white;
+    background-color: white;
     padding: 0;
   }
 
@@ -124,8 +125,8 @@ export default {
     position: relative;
     text-align: left;
     float: left;
-    border-right: 1px solid black;
-    border-top: 1px solid black;
+    border-right: 1px solid #000;
+    border-top: 1px solid #000;
     padding: 0 4px;
     top: 483px;
     border-top-right-radius: 10px;
@@ -138,8 +139,8 @@ export default {
     position: relative;
     text-align: right;
     float: right;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    border-left: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
     padding: 0 4px;
     border-bottom-left-radius: 10px;
     background-color: #00000080;
