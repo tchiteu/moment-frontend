@@ -36,6 +36,7 @@
 
           <v-btn
             color="success"
+    name: '404',
             class="mb-3"
           >
             ENTRAR
