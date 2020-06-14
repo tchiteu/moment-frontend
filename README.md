@@ -1,24 +1,16 @@
 # moment-frontend
 
-## Project setup
+### Instala todas dependências do projeto
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Rodar servidor para desenvolvimento
 ```
-npm run serve
+npm run dev
 ```
 
-### Compiles and minifies for production
+### Cria dist para produção
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
