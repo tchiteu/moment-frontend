@@ -7,7 +7,7 @@ app.use(express.json())
 
 app.all("*", (_req, res) => {
   try {
-    res.sendFile('/home/matheus/projetos/moment-frontend/dist/index.html');
+    res.sendFile('/home/matheus/app/moment-frontend/dist/index.html');
   } catch (error) {
     const json = {
       message: "Página não encontrada!"
@@ -16,4 +16,4 @@ app.all("*", (_req, res) => {
   }
 });
 
-app.listen(3000);
+app.listen(80);
