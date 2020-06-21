@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: 'inicio'
+  name: 'inicio',
 }
 </script>

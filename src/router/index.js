@@ -5,7 +5,6 @@ import VueRouter from 'vue-router';
 import inicio from '../views/inicio.vue';
 import login from '../views/login.vue';
 import cadastro from '../views/cadastro.vue';
-// import page_404 from '../views/page_404';
 
 Vue.use(VueRouter)
 
@@ -24,7 +23,7 @@ const routes = [
     path: '/cadastro',
     name: 'cadastro',
     component: cadastro
-  }
+  },
 ]
 
 const router = new VueRouter({
