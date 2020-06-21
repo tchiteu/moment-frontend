@@ -37,6 +37,7 @@
           <v-btn
             color="success"
             class="mb-3"
+            @click="login()"
           >
             ENTRAR
           </v-btn>
@@ -44,7 +45,8 @@
         
         <v-card outlined class="card-links py-2">
           <router-link to="/recuperar">Esqueci minha senha</router-link>
-          <small class="px-2"> • </small>
+          <br v-if="breakpoint == 'xs'">
+          <small v-else class="px-2"> • </small>
           <router-link to="/cadastro">Não tenho uma conta</router-link>
         </v-card>
 
@@ -64,8 +66,6 @@ export default {
   },
   data() {
     return {
-      nome: '',
-      usuario: '',
       email: '',
       senha: '',
 
@@ -75,6 +75,24 @@ export default {
       },
 
       paises: Paises,
+    }
+  },
+  methods: {
+    async login() {
+      try {
+        const options = {
+          email: this.email,
+          senha: this.senha
+        }
+        const retorno = await this.$axios.post('login', options);
+        console.log(retorno);
+      } catch(error) {
+        // notificar
+        let msg = error.response.data.message;
+        this.$vToastify.error(msg, "Erro")
+      }
+
+      // console.log(retorno);
     }
   },
   computed: {
