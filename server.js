@@ -1,10 +1,5 @@
-const express = require('express');
-const https = require('https');
-const fs = require('fs');
 
-const privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
-const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
-const credentials = {key: privateKey, cert: certificate};
+const express = require('express');
 
 const app = express();
 
@@ -13,8 +8,8 @@ app.use(express.json())
 
 app.all("*", (_req, res) => {
   try {
-    // res.sendFile('/home/matheus/app/moment-frontend/dist/index.html');
-    res.sendFile('/home/matheus/projetos/moment-frontend/dist/index.html');
+    res.sendFile('/home/matheus/app/moment-frontend/dist/index.html');
+   // res.sendFile('/home/matheus/projetos/moment-frontend/dist/index.html');
   } catch (error) {
     const json = {
       message: "Página não encontrada!"
@@ -23,6 +18,4 @@ app.all("*", (_req, res) => {
   }
 });
 
-const httpsServer = https.createServer(credentials, app);
-
-httpsServer.listen(8080);
+app.listen(5000);
