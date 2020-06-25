@@ -19,17 +19,18 @@
         <v-card outlined class="card-form">
           <h3 class="pt-4">Login</h3>
           
-          <v-form class="px-12">
+          <v-form ref="form" lazy-validation class="px-12">
             <v-text-field
               v-model="email"
               label="E-mail"
-              required
+              :rules="emailRules"
             ></v-text-field>
 
             <v-text-field
               v-model="senha"
               label="Senha"
               type="password"
+              :rules="senhaRules"
               required
             ></v-text-field>
           </v-form>
@@ -37,6 +38,7 @@
           <v-btn
             color="success"
             class="mb-3"
+            :loading="loading"
             @click="login()"
           >
             ENTRAR
@@ -44,7 +46,8 @@
         </v-card>
         
         <v-card outlined class="card-links py-2">
-          <router-link to="/recuperar">Esqueci minha senha</router-link>
+          <!-- <router-link to="/recuperar">Esqueci minha senha</router-link> -->
+          <a class="text-disable">Esqueci minha senha</a>
           <br v-if="breakpoint == 'xs'">
           <small v-else class="px-2"> • </small>
           <router-link to="/cadastro">Não tenho uma conta</router-link>
@@ -57,7 +60,6 @@
 
 <script>
 import Logo from '../components/Logo';
-import Paises from '../assets/paises.js';
 
 export default {  
   name: 'Login',
@@ -68,31 +70,43 @@ export default {
     return {
       email: '',
       senha: '',
-
+      loading: false,
+      
       momento: {
         imagem: "https://source.unsplash.com/random/600x800",
         usuario: "@matheus_santos"
       },
 
-      paises: Paises,
+      emailRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => /.+@.+\..+/.test(v) || 'Esse e-mail não é válido.',
+      ],
+      senhaRules: [
+        v => !!v || 'Campo obrigatório.',
+      ],
     }
   },
   methods: {
     async login() {
-      try {
-        const options = {
-          email: this.email,
-          senha: this.senha
-        }
-        const retorno = await this.$axios.post('login', options);
-        console.log(retorno);
-      } catch(error) {
-        // notificar
-        let msg = error.response.data.message;
-        this.$vToastify.error(msg, "Erro")
+      if(!this.$refs.form.validate()) return false; 
+      this.loading = true;
+
+      const options = {
+        email: this.email,
+        senha: this.senha
       }
 
-      // console.log(retorno);
+      const retorno = await this.$axios.post('login', options)
+        .catch(err => {
+          let msg = err.response.data.message;
+          this.$toasted.error(msg);
+        });
+      
+      if(retorno) {
+        localStorage.token = retorno.data.token;
+      }
+
+      this.loading = false;
     }
   },
   computed: {
