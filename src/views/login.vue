@@ -87,9 +87,8 @@ export default {
         const retorno = await this.$axios.post('login', options);
         console.log(retorno);
       } catch(error) {
-        // notificar
         let msg = error.response.data.message;
-        this.$vToastify.error(msg, "Erro")
+        this.$toasted.show(msg);
       }
 
       // console.log(retorno);
