@@ -1,0 +1,6 @@
+.text-disable {
+  color: gray !important;
+}
+.text-disable:hover {
+  cursor: default;
+}
