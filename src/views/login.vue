@@ -103,7 +103,7 @@ export default {
         });
       
       if(retorno) {
-        console.log(retorno.data.token)
+        localStorage.token = retorno.data.token;
       }
 
       this.loading = false;
