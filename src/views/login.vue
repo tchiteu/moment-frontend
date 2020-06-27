@@ -14,7 +14,7 @@
       </v-col>
 
       <v-col md="7" xs="12" class="container-form">
-        <Logo class="mt-2" color="black" fontSize="40px" />
+        <Logo class="mt-12" color="black" fontSize="40px" />
         
         <v-card outlined class="card-form">
           <h3 class="pt-4">Login</h3>
@@ -23,6 +23,7 @@
             <v-text-field
               v-model="email"
               label="E-mail"
+              placeholder=" "
               :rules="emailRules"
             ></v-text-field>
 
@@ -30,6 +31,7 @@
               v-model="senha"
               label="Senha"
               type="password"
+              placeholder=" "
               :rules="senhaRules"
               required
             ></v-text-field>
@@ -100,6 +102,7 @@ export default {
         .catch(err => {
           let msg = err.response.data.message;
           this.$toasted.error(msg);
+          this.loading = false;
         });
       
       if(retorno) {

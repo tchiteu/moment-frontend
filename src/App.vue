@@ -6,8 +6,25 @@
 
 <script>
   export default {
+    data: () => ({
+      pages_liberadas: ["/login", "/cadastro"],
+    }),
     mounted() {
-      console.log(localStorage.token);
+      this.verificaToken();
+    },
+    methods: {
+      verificaToken() {
+        if(!localStorage.token) {
+          let redirect = true;
+          for(let page of this.pages_liberadas) {
+            if(window.location.pathname == page) {
+              redirect = false;
+            }
+          }
+          
+          if(redirect) window.location.href = "/login";
+        }
+      }
     }
   }
 </script>
