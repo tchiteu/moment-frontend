@@ -18,11 +18,13 @@
         
         <v-card outlined class="card-form">
           <h3 class="pt-4">Cadastro</h3>
-          <v-form class="px-12">
+          <v-form ref="form" class="px-12">
             
             <v-text-field
               v-model="nome"
               label="Nome Completo"
+              :rules="nameRules"
+              placeholder=" "
               required
             ></v-text-field>
           
@@ -31,6 +33,8 @@
                 v-model="usuario"
                 prepend-icon="mdi-at"
                 label="Usuário"
+                :rules="userRules"
+                placeholder=" "
                 required
               ></v-text-field>
             </div>
@@ -40,6 +44,8 @@
             <v-text-field
               v-model="email"
               label="E-mail"
+              :rules="emailRules"
+              placeholder=" "
               required
             ></v-text-field>
 
@@ -47,6 +53,8 @@
               v-model="senha"
               label="Senha"
               type="password"
+              placeholder=" "
+              :rules="passRules"
               required
             ></v-text-field>
           </v-form>
@@ -54,6 +62,7 @@
           <v-btn
             color="success"
             class="mb-3"
+            @click="cadastrar()"
           >
             Cadastrar
           </v-btn>
@@ -89,7 +98,53 @@ export default {
         usuario: "@matheus_santos"
       },
 
+      reqRules: [v => !!v || 'Campo obrigatório.'],
+      userRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => v.length > 2 || 'Nome de usuário curto.',
+        v => v.length < 12 || 'Nome de usuário muito longo.',
+        v => this.verificaUsuario(v)
+      ],
+      nameRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => v.length < 55 || 'Nome muito longo.',
+      ],
+      emailRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => /.+@.+\..+/.test(v) || 'Esse e-mail não é válido.',
+        v => v.length < 45 || 'E-mail muito longo.',
+      ],
+      passRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => v.length > 5 || 'Senha fraca.',
+        v => v.length < 25 || 'Senha muito longa.',
+      ],
+
       paises: Paises,
+    }
+  },
+  methods: {
+    cadastrar() {
+      if(!this.$refs.form.validate()) return false; 
+
+      alert("realizou cadastro")
+    },
+    verificaUsuario(usuario) {
+      console.log(this.usuarioExiste(usuario));
+      // if(this.usuarioExiste(usuario)) {
+      //   return "Nome de usuário já utilizado."
+      // } else {
+      //   return true;
+      // }
+    },
+    async usuarioExiste(usuario) {
+      if(usuario.length > 2 && usuario.length < 12) {
+        await this.$axios.get(`/usuarios/verificar-usuario/${usuario}`)
+          .then(retorno => {
+            console.log(retorno);
+            return retorno.data.existe;      
+          });
+      }
     }
   },
   computed: {
