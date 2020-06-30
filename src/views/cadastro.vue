@@ -28,20 +28,20 @@
               required
             ></v-text-field>
           
-            <div>
-              <v-text-field
-                v-model="usuario"
-                prepend-inner-icon="mdi-at"
-                label="Usuário"
-                :rules="userRules"
-                required
-              ></v-text-field>
-            </div>
+            <v-text-field
+              v-model="usuario"
+              prepend-inner-icon="mdi-at"
+              label="Usuário"
+              :rules="userRules"
+              :error-messages="(this.usuarioExiste) ? 'Nome de usuário já existente.' : ''"
+              :loading="loadingUsuario"
+              required
+            ></v-text-field>
 
             <v-select 
               label="País"
               :items="paises"
-              append-outer-icon="mdi-map"
+              append-outer-icon="mdi-map-marker"
             />
             
             <v-text-field
@@ -95,6 +95,8 @@ export default {
     return {
       nome: '',
       usuario: '',
+      usuarioExiste: false,
+      loadingUsuario: false,
       email: '',
       senha: '',
 
@@ -107,7 +109,7 @@ export default {
       userRules: [
         v => !!v || 'Campo obrigatório.',
         v => v.length > 2 || 'Nome de usuário curto.',
-        v => v.length < 12 || 'Nome de usuário muito longo.'
+        v => v.length < 12 || 'Nome de usuário muito longo.',
       ],
       nameRules: [
         v => !!v || 'Campo obrigatório.',
@@ -128,22 +130,30 @@ export default {
     }
   },
   watch: {
+    usuario(val) {
+      if(val) this.verificaUsuario(val);
+    }
   },
   methods: {
     cadastrar() {
-      if(!this.$refs.form.validate()) return false; 
+      if(!this.$refs.form.validate() || this.usuarioExiste) return false; 
 
       alert("realizou cadastro")
     },
     async verificaUsuario(usuario) {
       if(usuario.length > 2 && usuario.length < 12) {
-        return await this.$axios.get(`/usuarios/verificar-usuario/${usuario}`)
-          .then(retorno => {
-            return retorno.data.existe;      
-          });
-      }
+        this.loadingUsuario = true;
 
-      return true;
+        let existe = await this.$axios.get(`/usuarios/verificar-usuario/${usuario}`);
+
+        if(existe.data.existe) {
+          this.usuarioExiste = true;
+        } else {
+          this.usuarioExiste = false;
+        }
+
+        this.loadingUsuario = false;
+      }
     }
   }
 }
