@@ -2,7 +2,7 @@
   <v-app>
     <v-row justify="center">
       <v-col 
-        v-if="breakpoint != 'xs' && 'sm'"
+        v-if="!mobile"
         md="5"
         class="pa-0"
       >
@@ -31,15 +31,18 @@
             <div>
               <v-text-field
                 v-model="usuario"
-                prepend-icon="mdi-at"
+                prepend-inner-icon="mdi-at"
                 label="Usuário"
                 :rules="userRules"
-                placeholder=" "
                 required
               ></v-text-field>
             </div>
 
-            <v-select label="País" :items="paises" />
+            <v-select 
+              label="País"
+              :items="paises"
+              append-outer-icon="mdi-map"
+            />
             
             <v-text-field
               v-model="email"
@@ -78,10 +81,12 @@
 </template>
 
 <script>
+import mixinGlobal from '../plugins/mixinGlobal';
 import Logo from '../components/Logo';
 import Paises from '../assets/paises.js';
 
 export default {  
+  mixins: [mixinGlobal],
   name: 'Cadastro',
   components: {
     Logo
@@ -102,26 +107,27 @@ export default {
       userRules: [
         v => !!v || 'Campo obrigatório.',
         v => v.length > 2 || 'Nome de usuário curto.',
-        v => v.length < 12 || 'Nome de usuário muito longo.',
-        v => this.verificaUsuario(v)
+        v => v.length < 12 || 'Nome de usuário muito longo.'
       ],
       nameRules: [
         v => !!v || 'Campo obrigatório.',
-        v => v.length < 55 || 'Nome muito longo.',
+        v => v.length < 55 || 'Nome muito longo.'
       ],
       emailRules: [
         v => !!v || 'Campo obrigatório.',
         v => /.+@.+\..+/.test(v) || 'Esse e-mail não é válido.',
-        v => v.length < 45 || 'E-mail muito longo.',
+        v => v.length < 45 || 'E-mail muito longo.'
       ],
       passRules: [
         v => !!v || 'Campo obrigatório.',
         v => v.length > 5 || 'Senha fraca.',
-        v => v.length < 25 || 'Senha muito longa.',
+        v => v.length < 25 || 'Senha muito longa.'
       ],
 
       paises: Paises,
     }
+  },
+  watch: {
   },
   methods: {
     cadastrar() {
@@ -129,27 +135,15 @@ export default {
 
       alert("realizou cadastro")
     },
-    verificaUsuario(usuario) {
-      console.log(this.usuarioExiste(usuario));
-      // if(this.usuarioExiste(usuario)) {
-      //   return "Nome de usuário já utilizado."
-      // } else {
-      //   return true;
-      // }
-    },
-    async usuarioExiste(usuario) {
+    async verificaUsuario(usuario) {
       if(usuario.length > 2 && usuario.length < 12) {
-        await this.$axios.get(`/usuarios/verificar-usuario/${usuario}`)
+        return await this.$axios.get(`/usuarios/verificar-usuario/${usuario}`)
           .then(retorno => {
-            console.log(retorno);
             return retorno.data.existe;      
           });
       }
-    }
-  },
-  computed: {
-    breakpoint() {
-      return this.$vuetify.breakpoint.name;
+
+      return true;
     }
   }
 }
