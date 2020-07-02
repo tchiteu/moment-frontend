@@ -2,7 +2,7 @@
   <v-app>
     <v-row justify="center">
       <v-col 
-        v-if="breakpoint != 'xs' && 'sm'"
+        v-if="!mobile"
         md="5"
         class="pa-0"
       >
@@ -18,28 +18,37 @@
         
         <v-card outlined class="card-form">
           <h3 class="pt-4">Cadastro</h3>
-          <v-form class="px-12">
+          <v-form ref="form" class="px-12">
             
             <v-text-field
               v-model="nome"
               label="Nome Completo"
+              :rules="nameRules"
+              placeholder=" "
               required
             ></v-text-field>
           
-            <div>
-              <v-text-field
-                v-model="usuario"
-                prepend-icon="mdi-at"
-                label="Usuário"
-                required
-              ></v-text-field>
-            </div>
+            <v-text-field
+              v-model="usuario"
+              prepend-inner-icon="mdi-at"
+              label="Usuário"
+              :rules="userRules"
+              :error-messages="(this.usuarioExiste) ? 'Nome de usuário já existente.' : ''"
+              :loading="loadingUsuario"
+              required
+            ></v-text-field>
 
-            <v-select label="País" :items="paises" />
+            <v-select 
+              label="País"
+              :items="paises"
+              append-outer-icon="mdi-map-marker"
+            />
             
             <v-text-field
               v-model="email"
               label="E-mail"
+              :rules="emailRules"
+              placeholder=" "
               required
             ></v-text-field>
 
@@ -47,6 +56,8 @@
               v-model="senha"
               label="Senha"
               type="password"
+              placeholder=" "
+              :rules="passRules"
               required
             ></v-text-field>
           </v-form>
@@ -54,6 +65,7 @@
           <v-btn
             color="success"
             class="mb-3"
+            @click="cadastrar()"
           >
             Cadastrar
           </v-btn>
@@ -69,10 +81,12 @@
 </template>
 
 <script>
+import mixinGlobal from '../plugins/mixinGlobal';
 import Logo from '../components/Logo';
 import Paises from '../assets/paises.js';
 
 export default {  
+  mixins: [mixinGlobal],
   name: 'Cadastro',
   components: {
     Logo
@@ -81,6 +95,8 @@ export default {
     return {
       nome: '',
       usuario: '',
+      usuarioExiste: false,
+      loadingUsuario: false,
       email: '',
       senha: '',
 
@@ -89,12 +105,55 @@ export default {
         usuario: "@matheus_santos"
       },
 
+      reqRules: [v => !!v || 'Campo obrigatório.'],
+      userRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => v.length > 2 || 'Nome de usuário curto.',
+        v => v.length < 12 || 'Nome de usuário muito longo.',
+      ],
+      nameRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => v.length < 55 || 'Nome muito longo.'
+      ],
+      emailRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => /.+@.+\..+/.test(v) || 'Esse e-mail não é válido.',
+        v => v.length < 45 || 'E-mail muito longo.'
+      ],
+      passRules: [
+        v => !!v || 'Campo obrigatório.',
+        v => v.length > 5 || 'Senha fraca.',
+        v => v.length < 25 || 'Senha muito longa.'
+      ],
+
       paises: Paises,
     }
   },
-  computed: {
-    breakpoint() {
-      return this.$vuetify.breakpoint.name;
+  watch: {
+    usuario(val) {
+      if(val) this.verificaUsuario(val);
+    }
+  },
+  methods: {
+    cadastrar() {
+      if(!this.$refs.form.validate() || this.usuarioExiste) return false; 
+
+      alert("realizou cadastro")
+    },
+    async verificaUsuario(usuario) {
+      if(usuario.length > 2 && usuario.length < 12) {
+        this.loadingUsuario = true;
+
+        let existe = await this.$axios.get(`/usuarios/verificar-usuario/${usuario}`);
+
+        if(existe.data.existe) {
+          this.usuarioExiste = true;
+        } else {
+          this.usuarioExiste = false;
+        }
+
+        this.loadingUsuario = false;
+      }
     }
   }
 }
