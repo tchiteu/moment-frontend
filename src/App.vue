@@ -14,27 +14,18 @@
     },
     methods: {
       async verificaToken() {
-        let token = false;
+        await this.$axios.get("/")
+          .catch(() => {
+            let redirect = true;
 
-        const retorno = await this.$axios.get("/")
-          .catch((err) => {
-            let auth = err.response.data.auth;
-            if(!auth) token = false;
-          })
-        
-        if(retorno) token = true;
-
-        if(!token) {
-          let redirect = true;
-
-          for(let page of this.pages_liberadas) {
-            if(window.location.pathname == page) {
-              redirect = false;
+            for(let page of this.pages_liberadas) {
+              if(window.location.pathname == page) {
+                redirect = false;
+              }
             }
-          }
           
-          if(redirect) window.location.href = "/login";
-        }
+            if(redirect) window.location.href = "/login";
+          })
       }
     }
   }
