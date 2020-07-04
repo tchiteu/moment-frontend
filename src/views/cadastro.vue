@@ -131,7 +131,7 @@ export default {
   },
   watch: {
     usuario(val) {
-      if(val) this.verificaUsuario(val);
+      this.verificaUsuario(val);
     }
   },
   methods: {
@@ -153,6 +153,8 @@ export default {
         }
 
         this.loadingUsuario = false;
+      } else {
+        this.usuarioExiste = false;
       }
     }
   }
