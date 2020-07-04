@@ -13,9 +13,20 @@
       this.verificaToken();
     },
     methods: {
-      verificaToken() {
-        if(!localStorage.token) {
+      async verificaToken() {
+        let token = false;
+
+        const retorno = await this.$axios.get("/")
+          .catch((err) => {
+            let auth = err.response.data.auth;
+            if(!auth) token = false;
+          })
+        
+        if(retorno) token = true;
+
+        if(!token) {
           let redirect = true;
+
           for(let page of this.pages_liberadas) {
             if(window.location.pathname == page) {
               redirect = false;
