@@ -1,55 +1,61 @@
 <template>
   <v-app>
     <v-container fluid>
-      <div class="lista-momentos">
-        <Momento
-          v-for="(momento, index) in momentos"
-          :key="index"
-          :momento="momento"
-          class="ma-4"
-        />
-      </div>  
-
-      <v-navigation-drawer class="menu-fixed" fixed right>
-        <v-list>
-          <v-list-item-group>
-            <v-list-item inactive>
-              <v-list-item-content>
-                <v-list-item-title>
-                  Matheus Santos
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  Brazil
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-divider />
-            
-            <v-list-item 
-              link v-for="(item, index) in menu"
+      <v-row>
+        <v-col cols="9">
+          <div class="lista-momentos ml-12">
+            <Momento
+              v-for="(momento, index) in momentos"
               :key="index"
-            >
-              <v-list-item-icon>
-                <v-icon>{{ item.icone }}</v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content>
-                <v-list-item-title class="lista-titulo">
-                  {{ item.titulo }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-        
-
-        <template v-slot:append>
-          <div class="pa-2">
-            <v-btn block color="#ff6347">SAIR</v-btn>
+              :momento="momento"
+              class="my-12"
+            />
           </div>
-        </template>
-      </v-navigation-drawer>
+        </v-col>
+        <v-col cols="3">
+          <v-navigation-drawer class="menu-fixed" fixed right>
+            <v-list>
+              <v-list-item-group>
+                <v-list-item inactive>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      Matheus Santos
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      Brazil
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+
+                <v-divider />
+                
+                <v-list-item 
+                  link v-for="(item, index) in menu"
+                  :key="index"
+                >
+                  <v-list-item-icon>
+                    <v-icon>{{ item.icone }}</v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-list-item-title class="lista-titulo">
+                      {{ item.titulo }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+            
+
+            <template v-slot:append>
+              <div class="pa-2">
+                <v-btn block color="#ff6347">SAIR</v-btn>
+              </div>
+            </template>
+          </v-navigation-drawer>
+        </v-col>
+      </v-row>
+
     </v-container>
   </v-app>
 </template>
@@ -125,7 +131,8 @@ export default {
   }
 
   .lista-momentos {
-    width: 100%;
-    border: solid black 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>
