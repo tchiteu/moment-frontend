@@ -11,6 +11,8 @@
     }),
     mounted() {
       this.verificaToken();
+
+      this.callback();
     },
     methods: {
       async verificaToken() {
@@ -24,8 +26,16 @@
               }
             }
           
-            if(redirect) window.location.href = "/login";
+            if(redirect) this.$router.push("/login");
           })
+      },
+      callback() {
+        if(this.$route.query.callback_error) {
+          this.$toasted.error(this.$route.query.callback_error);
+        }
+        else if(this.$route.query.callback_success) {
+          this.$toasted.success(this.$route.query.callback_success);
+        }
       }
     }
   }

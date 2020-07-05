@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Toasted from 'vue-toasted';
 
 const options = {
-  duration: 2000,
+  duration: 3500,
+  position: "bottom-right"
 }
 
 Vue.use(Toasted, options);
