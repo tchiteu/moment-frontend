@@ -11,18 +11,30 @@
     }),
     mounted() {
       this.verificaToken();
+
+      this.callback();
     },
     methods: {
-      verificaToken() {
-        if(!localStorage.token) {
-          let redirect = true;
-          for(let page of this.pages_liberadas) {
-            if(window.location.pathname == page) {
-              redirect = false;
+      async verificaToken() {
+        await this.$axios.get("/")
+          .catch(() => {
+            let redirect = true;
+
+            for(let page of this.pages_liberadas) {
+              if(window.location.pathname == page) {
+                redirect = false;
+              }
             }
-          }
           
-          if(redirect) window.location.href = "/login";
+            if(redirect) this.$router.push("/login");
+          })
+      },
+      callback() {
+        if(this.$route.query.callback_error) {
+          this.$toasted.error(this.$route.query.callback_error);
+        }
+        else if(this.$route.query.callback_success) {
+          this.$toasted.success(this.$route.query.callback_success);
         }
       }
     }

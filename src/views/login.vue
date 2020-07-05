@@ -107,6 +107,7 @@ export default {
       
       if(retorno) {
         localStorage.token = retorno.data.token;
+        this.$router.push("/");
       }
 
       this.loading = false;

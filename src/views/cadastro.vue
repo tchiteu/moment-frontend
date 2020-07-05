@@ -21,7 +21,7 @@
           <v-form ref="form" class="px-12">
             
             <v-text-field
-              v-model="nome"
+              v-model="usuario.nome"
               label="Nome Completo"
               :rules="nameRules"
               placeholder=" "
@@ -29,7 +29,7 @@
             ></v-text-field>
           
             <v-text-field
-              v-model="usuario"
+              v-model="usuario.usuario"
               prepend-inner-icon="mdi-at"
               label="Usuário"
               :rules="userRules"
@@ -40,12 +40,13 @@
 
             <v-select 
               label="País"
+              v-model="usuario.pais"
               :items="paises"
               append-outer-icon="mdi-map-marker"
             />
             
             <v-text-field
-              v-model="email"
+              v-model="usuario.email"
               label="E-mail"
               :rules="emailRules"
               placeholder=" "
@@ -53,7 +54,7 @@
             ></v-text-field>
 
             <v-text-field
-              v-model="senha"
+              v-model="usuario.senha"
               label="Senha"
               type="password"
               placeholder=" "
@@ -93,12 +94,16 @@ export default {
   },
   data() {
     return {
-      nome: '',
-      usuario: '',
+      usuario: {
+        nome: '',
+        usuario: '',
+        pais: '',
+        email: '',
+        senha: ''
+      },
+
       usuarioExiste: false,
-      loadingUsuario: false,
-      email: '',
-      senha: '',
+      loadingUsuario: false,  
 
       momento: {
         imagem: "https://source.unsplash.com/random/600x800",
@@ -130,15 +135,27 @@ export default {
     }
   },
   watch: {
-    usuario(val) {
-      if(val) this.verificaUsuario(val);
+    'usuario.usuario'(val) {
+      this.verificaUsuario(val);
     }
   },
   methods: {
-    cadastrar() {
+    async cadastrar() {
       if(!this.$refs.form.validate() || this.usuarioExiste) return false; 
 
-      alert("realizou cadastro")
+      const retorno = await this.$axios.post('usuarios', this.usuario)
+        .catch((err) => {
+          if(err.response.data) {
+            this.$toasted.error(err.response.data.message);
+          }
+        })
+
+      if(retorno) {
+        if(retorno.data.codigo) {
+          this.$toasted.success("Cadastrado com sucesso!");
+          this.$router.push("/login");
+        }
+      }
     },
     async verificaUsuario(usuario) {
       if(usuario.length > 2 && usuario.length < 12) {
@@ -153,6 +170,8 @@ export default {
         }
 
         this.loadingUsuario = false;
+      } else {
+        this.usuarioExiste = false;
       }
     }
   }
