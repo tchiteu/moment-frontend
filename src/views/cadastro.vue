@@ -103,8 +103,7 @@ export default {
       },
 
       usuarioExiste: false,
-      loadingUsuario: false,
-      
+      loadingUsuario: false,  
 
       momento: {
         imagem: "https://source.unsplash.com/random/600x800",
