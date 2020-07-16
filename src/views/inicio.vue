@@ -32,6 +32,7 @@
                 <v-list-item 
                   link v-for="(item, index) in menu"
                   :key="index"
+                  @click="item.funcao"
                 >
                   <v-list-item-icon>
                     <v-icon>{{ item.icone }}</v-icon>
@@ -55,8 +56,29 @@
           </v-navigation-drawer>
         </v-col>
       </v-row>
-
     </v-container>
+
+    <v-dialog v-model="modalMomento" max-width="600">
+      <v-card>
+        <v-row class="mx-4" no-gutters>
+          <v-col cols="5" class="mt-4">
+             <v-file-input
+              :rules="rulesMomento"
+              accept="image/png, image/jpeg, image/bmp"
+              placeholder="Selecione uma foto"
+              prepend-icon="mdi-camera"
+              label="Foto do momento"
+            ></v-file-input>
+          </v-col>
+          <v-col cols="6" class="mt-4 ml-4">
+             <v-text-field
+              placeholder="Ex. Salve Geral"
+              label="Legenda do momento"
+            ></v-text-field>
+          </v-col>
+      </v-row>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -68,49 +90,61 @@ export default {
   components: {
     Momento
   },
-  data: () => ({
-    momentos:[
-      {
-        imagem: "https://source.unsplash.com/random/600x800",
-        usuario: "@matheus_santos",
-        titulo: "Foto aleatória",
-        descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
-        curtidas: 302,
-      },
-      {
-        imagem: "https://source.unsplash.com/random/600x800",
-        usuario: "@giza",
-        titulo: "Foto aleatória",
-        descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
-        curtidas: 302
-      },
-      {
-        imagem: "https://source.unsplash.com/random/600x800",
-        usuario: "@noix_guri",
-        titulo: "Foto aleatória",
-        descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
-        curtidas: 302
-      },
-    ],
-    menu: [
-      {
-        titulo: "Início",
-        icone: "mdi-home"
-      },
-      {
-        titulo: "Minha Conta",
-        icone: "mdi-account"
-      },
-      {
-        titulo: "Adicionar Amigos",
-        icone: "mdi-account-plus"
-      },
-      {
-        titulo: "Novo Momento",
-        icone: "mdi-card-plus"
-      }
-    ]
-  }),
+  data: function() {
+    return {
+      modalMomento: false,
+      rulesMomento: [
+        value => !value || value.size < 2000000 || 'A foto deve ter menos de 2 mb.',
+      ],
+      momentos:[
+        {
+          imagem: "https://source.unsplash.com/random/600x800",
+          usuario: "@matheus_santos",
+          titulo: "Foto aleatória",
+          descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
+          curtidas: 302,
+        },
+        {
+          imagem: "https://source.unsplash.com/random/600x800",
+          usuario: "@giza",
+          titulo: "Foto aleatória",
+          descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
+          curtidas: 302
+        },
+        {
+          imagem: "https://source.unsplash.com/random/600x800",
+          usuario: "@noix_guri",
+          titulo: "Foto aleatória",
+          descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
+          curtidas: 302
+        },
+      ],
+      menu: [
+        {
+          titulo: "Início",
+          icone: "mdi-home"
+        },
+        {
+          titulo: "Minha Conta",
+          icone: "mdi-account"
+        },
+        {
+          titulo: "Adicionar Amigos",
+          icone: "mdi-account-plus"
+        },
+        {
+          titulo: "Novo Momento",
+          icone: "mdi-card-plus",
+          funcao:() => this.modalMomento = !this.modalMomento
+        }
+      ]
+    }
+  },
+  methods: {
+    teste() {
+      alert('t')
+    }
+  }
 }
 </script>
 
