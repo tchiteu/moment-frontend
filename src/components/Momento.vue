@@ -11,7 +11,7 @@
 
       <v-img 
         v-else
-        height="400px"
+        height="350px"
         src="../../public/photo_icon.png"
       >
         <div class="momento-usuario">{{ momento.usuario }}</div>

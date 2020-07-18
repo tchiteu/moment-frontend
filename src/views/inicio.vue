@@ -72,11 +72,12 @@
               placeholder="Ex. Natal com a familia"
               label="Título do momento"
               v-model="novo_momento.titulo"
+              :rules="rulesObrigatorio"
             />
           </v-col>
           <v-col cols="5" class="ml-8 mt-4">
             <v-file-input
-              :rules="rulesMomento"
+              :rules="rulesFoto"
               accept="image/png, image/jpeg, image/bmp"
               placeholder="Selecione uma foto"
               prepend-icon="mdi-camera"
@@ -91,6 +92,7 @@
               placeholder="Ex. Salve Geral"
               label="Descrição do momento"
               v-model="novo_momento.descricao"
+              :rules="rulesObrigatorio"
             ></v-text-field>
           </v-col>
       </v-row>
@@ -127,9 +129,9 @@ export default {
   data: function() {
     return {
       modalMomento: false,
-      rulesMomento: [
-        value => !value || value.size < 2000000 || 'A foto deve ter menos de 2 mb.',
-      ],
+      rulesFoto: [v => !v || v.size < 2000000 || "A foto deve ter menos de 2mb."],
+      rulesObrigatorio: [ v => !!v || "Campo obrigatório" ],
+
       momentos:[
         {
           imagem: "https://source.unsplash.com/random/600x800",
