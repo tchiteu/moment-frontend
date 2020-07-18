@@ -1,18 +1,28 @@
 <template>
   <div>
     <v-card outlined class="momento-card">
-      <v-img
+      <v-img 
+        v-if="momento.imagem"
         height="400px"
         :src="momento.imagem"
       >
         <div class="momento-usuario">{{ momento.usuario }}</div>
       </v-img>
 
+      <v-img 
+        v-else
+        height="350px"
+        src="../../public/photo_icon.png"
+      >
+        <div class="momento-usuario">{{ momento.usuario }}</div>
+      </v-img>
+      
+
       <v-card-title>{{ momento.titulo }}</v-card-title>
 
       <v-card-subtitle class="text-left">{{ momento.descricao }}</v-card-subtitle>
 
-      <v-card-actions>
+      <v-card-actions v-if="momento.curtidas">
         <v-icon class="mr-1">mdi-heart</v-icon>
         <span class="subheading mr-2">{{ momento.curtidas }}</span>
       </v-card-actions>

@@ -60,23 +60,59 @@
 
     <v-dialog v-model="modalMomento" max-width="600">
       <v-card>
-        <v-row class="mx-4" no-gutters>
+        <v-row no-gutters>
+          <v-col cols="12">
+
+          </v-col>
+        </v-row>
+
+        <v-row class="mx-6" justify="center" no-gutters>
           <v-col cols="5" class="mt-4">
-             <v-file-input
-              :rules="rulesMomento"
+            <v-text-field
+              placeholder="Ex. Natal com a familia"
+              label="Título do momento"
+              v-model="novo_momento.titulo"
+              :rules="rulesObrigatorio"
+            />
+          </v-col>
+          <v-col cols="5" class="ml-8 mt-4">
+            <v-file-input
+              :rules="rulesFoto"
               accept="image/png, image/jpeg, image/bmp"
               placeholder="Selecione uma foto"
               prepend-icon="mdi-camera"
               label="Foto do momento"
-            ></v-file-input>
+              v-model="novo_momento.pre_imagem"
+              @change="fotoSelecionada(novo_momento.pre_imagem)"
+            />
           </v-col>
-          <v-col cols="6" class="mt-4 ml-4">
+
+          <v-col cols="11" class="ml-2">
              <v-text-field
               placeholder="Ex. Salve Geral"
-              label="Legenda do momento"
+              label="Descrição do momento"
+              v-model="novo_momento.descricao"
+              :rules="rulesObrigatorio"
             ></v-text-field>
           </v-col>
       </v-row>
+
+      <v-row no-gutters justify="center">
+        <v-col cols="10">
+          <Momento
+            :momento="novo_momento"
+          />
+        </v-col>
+      </v-row>
+
+      <v-row no-gutters justify="center">
+        <v-col cols="10">
+          <v-btn block class="my-2" color="success">
+            Publicar
+          </v-btn>
+        </v-col>
+      </v-row>
+
       </v-card>
     </v-dialog>
   </v-app>
@@ -93,9 +129,9 @@ export default {
   data: function() {
     return {
       modalMomento: false,
-      rulesMomento: [
-        value => !value || value.size < 2000000 || 'A foto deve ter menos de 2 mb.',
-      ],
+      rulesFoto: [v => !v || v.size < 2000000 || "A foto deve ter menos de 2mb."],
+      rulesObrigatorio: [ v => !!v || "Campo obrigatório" ],
+
       momentos:[
         {
           imagem: "https://source.unsplash.com/random/600x800",
@@ -137,24 +173,26 @@ export default {
           icone: "mdi-card-plus",
           funcao:() => this.modalMomento = !this.modalMomento
         }
-      ]
+      ],
+      novo_momento: {
+        pre_imagem: null,
+        imagem: "",
+        titulo: "Exemplo",
+        descricao: "Descrição de exemplo, apenas isso.",
+        usuario: "@matheus_santos",
+      }
     }
   },
   methods: {
-    teste() {
-      alert('t')
+    fotoSelecionada(foto) {
+      const file = foto;
+      this.novo_momento.imagem = URL.createObjectURL(file);
     }
   }
 }
 </script>
 
 <style scoped>
-  .moments-feed {
-    border: #ff6347 solid 1px;
-    width: 100%;
-    min-height: 92vh;
-    height: 4000px;
-  }
   .menu-fixed {
     width: 100%;
     min-height: 92vh;
@@ -168,5 +206,11 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  
+  .canvas-momento {
+    border: solid 1px black;
+    width: 400px;
+    height: 400px;
   }
 </style>
