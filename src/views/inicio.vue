@@ -65,54 +65,60 @@
 
           </v-col>
         </v-row>
+        
+        <v-form ref="form_momento" lazy-validation>
+          <v-row class="mx-6" justify="center" no-gutters>
+            <v-col cols="5" class="mt-4">
+              <v-text-field
+                placeholder="Ex. Natal com a familia"
+                label="Título do momento"
+                v-model="novo_momento.titulo"
+                :rules="rulesObrigatorio"
+              />
+            </v-col>
+            <v-col cols="5" class="ml-8 mt-4">
+              <v-file-input
+                :rules="rulesFoto"
+                accept="image/png, image/jpeg, image/bmp"
+                placeholder="Selecione uma foto"
+                prepend-icon="mdi-camera"
+                label="Foto do momento"
+                v-model="novo_momento.pre_imagem"
+                @change="fotoSelecionada(novo_momento.pre_imagem)"
+              />
+            </v-col>
 
-        <v-row class="mx-6" justify="center" no-gutters>
-          <v-col cols="5" class="mt-4">
-            <v-text-field
-              placeholder="Ex. Natal com a familia"
-              label="Título do momento"
-              v-model="novo_momento.titulo"
-              :rules="rulesObrigatorio"
+            <v-col cols="11" class="ml-2">
+              <v-text-field
+                placeholder="Ex. Salve Geral"
+                label="Descrição do momento"
+                v-model="novo_momento.descricao"
+                :rules="rulesObrigatorio"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-form>
+
+        <v-row no-gutters justify="center">
+          <v-col cols="10">
+            <Momento
+              :momento="novo_momento"
             />
           </v-col>
-          <v-col cols="5" class="ml-8 mt-4">
-            <v-file-input
-              :rules="rulesFoto"
-              accept="image/png, image/jpeg, image/bmp"
-              placeholder="Selecione uma foto"
-              prepend-icon="mdi-camera"
-              label="Foto do momento"
-              v-model="novo_momento.pre_imagem"
-              @change="fotoSelecionada(novo_momento.pre_imagem)"
-            />
+        </v-row>
+
+        <v-row no-gutters justify="center">
+          <v-col cols="10">
+            <v-btn 
+              @click="publicar()"
+              block
+              class="my-2"
+              color="success"
+            >
+              Publicar
+            </v-btn>
           </v-col>
-
-          <v-col cols="11" class="ml-2">
-             <v-text-field
-              placeholder="Ex. Salve Geral"
-              label="Descrição do momento"
-              v-model="novo_momento.descricao"
-              :rules="rulesObrigatorio"
-            ></v-text-field>
-          </v-col>
-      </v-row>
-
-      <v-row no-gutters justify="center">
-        <v-col cols="10">
-          <Momento
-            :momento="novo_momento"
-          />
-        </v-col>
-      </v-row>
-
-      <v-row no-gutters justify="center">
-        <v-col cols="10">
-          <v-btn block class="my-2" color="success">
-            Publicar
-          </v-btn>
-        </v-col>
-      </v-row>
-
+        </v-row>
       </v-card>
     </v-dialog>
   </v-app>
@@ -129,7 +135,10 @@ export default {
   data: function() {
     return {
       modalMomento: false,
-      rulesFoto: [v => !v || v.size < 2000000 || "A foto deve ter menos de 2mb."],
+      rulesFoto: [
+        v => !!v || "Selecione uma foto",
+        v => !v || v.size < 2000000 || "A foto deve ter menos de 2 mb"
+      ],
       rulesObrigatorio: [ v => !!v || "Campo obrigatório" ],
 
       momentos:[
@@ -184,6 +193,11 @@ export default {
     }
   },
   methods: {
+    publicar() {
+      if(!this.$refs.form_momento.validate()) return false;
+
+      this.$toasted.success("Passou, parabai")
+    },
     fotoSelecionada(foto) {
       const file = foto;
       this.novo_momento.imagem = URL.createObjectURL(file);
