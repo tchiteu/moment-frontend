@@ -13,11 +13,7 @@
       <v-spacer></v-spacer>
 
       <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon>mdi-bell</v-icon>
       </v-btn>
     </v-app-bar>
     
@@ -74,7 +70,7 @@
               v-for="(momento, index) in momentos"
               :key="index"
               :momento="momento"
-              class="my-12"
+              class="mt-12"
             />
           </div>
         </v-col>
