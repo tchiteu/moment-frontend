@@ -1,9 +1,54 @@
 <template>
   <v-app>
+    <v-app-bar
+      color="deep-purple accent-4"
+      fixed
+      elevate-on-scroll
+      dark
+    >
+      <v-app-bar-nav-icon
+        @click="menuLateral = !menuLateral"
+      />
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-app-bar>
+    
+    <v-navigation-drawer
+      v-model="menuLateral"
+      fixed      
+      temporary
+    >
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title>John Leider</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block color="#ff6347">SAIR</v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
+
     <v-container fluid>
-      <v-row>
-        <v-col cols="9">
-          <div class="lista-momentos ml-12">
+      <v-row justify="center">
+        <v-col cols="12">
+          <div class="lista-momentos">
             <Momento
               v-for="(momento, index) in momentos"
               :key="index"
@@ -12,8 +57,8 @@
             />
           </div>
         </v-col>
-        <v-col cols="3">
-          <v-navigation-drawer class="menu-fixed" fixed right>
+
+          <!-- <v-navigation-drawer class="menu-fixed" temporary absolute :v-model="menuLateral">
             <v-list>
               <v-list-item-group>
                 <v-list-item inactive>
@@ -53,9 +98,9 @@
                 <v-btn block color="#ff6347">SAIR</v-btn>
               </div>
             </template>
-          </v-navigation-drawer>
-        </v-col>
+          </v-navigation-drawer> -->
       </v-row>
+      
     </v-container>
 
     <v-dialog v-model="modalMomento" max-width="600">
@@ -135,6 +180,7 @@ export default {
   data: function() {
     return {
       modalMomento: false,
+      menuLateral: false,
       rulesFoto: [
         v => !!v || "Selecione uma foto",
         v => !v || v.size < 2000000 || "A foto deve ter menos de 2 mb"
@@ -207,11 +253,6 @@ export default {
 </script>
 
 <style scoped>
-  .menu-fixed {
-    width: 100%;
-    min-height: 92vh;
-  }
-
   .lista-titulo {
     text-align: left;
   }
@@ -220,11 +261,5 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .canvas-momento {
-    border: solid 1px black;
-    width: 400px;
-    height: 400px;
   }
 </style>

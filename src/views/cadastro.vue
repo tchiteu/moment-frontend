@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="background">
     <v-row justify="center">
       <v-col 
         v-if="!mobile"
