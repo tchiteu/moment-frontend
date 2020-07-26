@@ -38,11 +38,11 @@
               required
             ></v-text-field>
 
-            <v-select 
+            <v-autocomplete
               label="País"
               v-model="usuario.pais"
               :items="paises"
-              append-outer-icon="mdi-map-marker"
+              hide-no-data
             />
             
             <v-text-field

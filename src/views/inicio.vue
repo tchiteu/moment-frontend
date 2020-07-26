@@ -26,17 +26,38 @@
       fixed      
       temporary
     >
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
-        </v-list-item-avatar>
+      <v-list>
+        <v-list-item-group>
+          <v-list-item inactive>
+            <v-list-item-content>
+              <v-list-item-title>
+                Matheus Santos
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                Brazil
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
 
-        <v-list-item-content>
-          <v-list-item-title>John Leider</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+          <v-divider />
+          
+          <v-list-item 
+            link v-for="(item, index) in menu"
+            :key="index"
+            @click="item.funcao"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icone }}</v-icon>
+            </v-list-item-icon>
 
-      <v-divider></v-divider>
+            <v-list-item-content>
+              <v-list-item-title class="lista-titulo">
+                {{ item.titulo }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
 
       <template v-slot:append>
         <div class="pa-2">
