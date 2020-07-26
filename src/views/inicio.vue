@@ -12,18 +12,18 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
+      <Logo color="#474290"/>
+
+      <v-spacer></v-spacer>
 
       <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon>mdi-bell</v-icon>
       </v-btn>
     </v-app-bar>
     
     <v-navigation-drawer
       v-model="menuLateral"
-      fixed      
+      fixed
       temporary
     >
       <v-list>
@@ -74,7 +74,7 @@
               v-for="(momento, index) in momentos"
               :key="index"
               :momento="momento"
-              class="my-12"
+              class="mt-12"
             />
           </div>
         </v-col>
@@ -149,11 +149,13 @@
 
 <script>
 import Momento from '../components/Momento.vue';
+import Logo from '../components/Logo.vue';
 
 export default {
   name: 'inicio',
   components: {
-    Momento
+    Momento,
+    Logo
   },
   data: function() {
     return {

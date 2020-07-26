@@ -31,5 +31,6 @@ export default {
     font-family: 'Pacifico', cursive;
     color: var(--cor);
     font-size: var(--fontSize);
+    text-shadow: 2px 2px 3px rgba(255,255,255,0.1);
   }
 </style>

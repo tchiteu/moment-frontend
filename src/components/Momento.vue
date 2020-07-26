@@ -1,12 +1,19 @@
 <template>
   <div>
-    <v-card outlined class="momento-card">
+    <v-card 
+      outlined 
+      class="momento-card" 
+      :width="(mobile) ? '320px' : '500px'"
+      tile
+    >
       <v-img 
         v-if="momento.imagem"
         height="400px"
         :src="momento.imagem"
       >
-        <div class="momento-usuario">{{ momento.usuario }}</div>
+        <div :class="(mobile) ? 'momento-usuario-mobile' : 'momento-usuario'">
+          {{ momento.usuario }}
+        </div>
       </v-img>
 
       <v-img 
@@ -14,9 +21,10 @@
         height="350px"
         src="../../public/photo_icon.png"
       >
-        <div class="momento-usuario">{{ momento.usuario }}</div>
+        <div :class="(mobile) ? 'momento-usuario-mobile' : 'momento-usuario'">
+          {{ momento.usuario }}
+        </div>
       </v-img>
-      
 
       <v-card-title>{{ momento.titulo }}</v-card-title>
 
@@ -31,6 +39,8 @@
 </template>
 
 <script>
+import mixinGlobal from '../plugins/mixinGlobal';
+
 export default {
   name: "Momento",
   data: () => ({
@@ -41,7 +51,8 @@ export default {
       type: Object,
       default: null
     }
-  }
+  },
+  mixins: [mixinGlobal]
 }
 </script>
 
@@ -51,6 +62,18 @@ export default {
   }
   .momento-usuario {
     font-size: 1vw;
+    color: white;
+    position: relative;
+    float: left;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    padding: 0 20px;
+    border-bottom-right-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .momento-usuario-mobile {
+    font-size: 4vw;
     color: white;
     position: relative;
     float: left;
