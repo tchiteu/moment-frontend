@@ -12,6 +12,10 @@
 
       <v-spacer></v-spacer>
 
+      <Logo color="#474290"/>
+
+      <v-spacer></v-spacer>
+
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
       </v-btn>
@@ -19,7 +23,7 @@
     
     <v-navigation-drawer
       v-model="menuLateral"
-      fixed      
+      fixed
       temporary
     >
       <v-list>
@@ -145,11 +149,13 @@
 
 <script>
 import Momento from '../components/Momento.vue';
+import Logo from '../components/Logo.vue';
 
 export default {
   name: 'inicio',
   components: {
-    Momento
+    Momento,
+    Logo
   },
   data: function() {
     return {

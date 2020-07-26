@@ -3,7 +3,8 @@
     <v-card 
       outlined 
       class="momento-card" 
-      width="320px"
+      :width="(mobile) ? '320px' : '500px'"
+      tile
     >
       <v-img 
         v-if="momento.imagem"
@@ -72,7 +73,7 @@ export default {
   }
 
   .momento-usuario-mobile {
-    font-size: 5vw;
+    font-size: 4vw;
     color: white;
     position: relative;
     float: left;
