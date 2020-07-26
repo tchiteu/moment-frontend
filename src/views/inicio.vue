@@ -1,9 +1,75 @@
 <template>
   <v-app>
+    <v-app-bar
+      color="deep-purple accent-4"
+      fixed
+      elevate-on-scroll
+      dark
+    >
+      <v-app-bar-nav-icon
+        @click="menuLateral = !menuLateral"
+      />
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-app-bar>
+    
+    <v-navigation-drawer
+      v-model="menuLateral"
+      fixed      
+      temporary
+    >
+      <v-list>
+        <v-list-item-group>
+          <v-list-item inactive>
+            <v-list-item-content>
+              <v-list-item-title>
+                Matheus Santos
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                Brazil
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-divider />
+          
+          <v-list-item 
+            link v-for="(item, index) in menu"
+            :key="index"
+            @click="item.funcao"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icone }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title class="lista-titulo">
+                {{ item.titulo }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block color="#ff6347">SAIR</v-btn>
+        </div>
+      </template>
+    </v-navigation-drawer>
+
     <v-container fluid>
-      <v-row>
-        <v-col cols="9">
-          <div class="lista-momentos ml-12">
+      <v-row justify="center">
+        <v-col cols="12">
+          <div class="lista-momentos">
             <Momento
               v-for="(momento, index) in momentos"
               :key="index"
@@ -12,63 +78,19 @@
             />
           </div>
         </v-col>
-        <v-col cols="3">
-          <v-navigation-drawer class="menu-fixed" fixed right>
-            <v-list>
-              <v-list-item-group>
-                <v-list-item inactive>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      Matheus Santos
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      Brazil
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-divider />
-                
-                <v-list-item 
-                  link v-for="(item, index) in menu"
-                  :key="index"
-                  @click="item.funcao"
-                >
-                  <v-list-item-icon>
-                    <v-icon>{{ item.icone }}</v-icon>
-                  </v-list-item-icon>
-
-                  <v-list-item-content>
-                    <v-list-item-title class="lista-titulo">
-                      {{ item.titulo }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-            
-
-            <template v-slot:append>
-              <div class="pa-2">
-                <v-btn block color="#ff6347">SAIR</v-btn>
-              </div>
-            </template>
-          </v-navigation-drawer>
-        </v-col>
       </v-row>
+      
     </v-container>
 
     <v-dialog v-model="modalMomento" max-width="600">
       <v-card>
-        <v-row no-gutters>
-          <v-col cols="12">
-
-          </v-col>
-        </v-row>
+        <v-icon class="modal-close pa-1" @click="modalMomento = false">
+          mdi-close
+        </v-icon>
         
         <v-form ref="form_momento" lazy-validation>
           <v-row class="mx-6" justify="center" no-gutters>
-            <v-col cols="5" class="mt-4">
+            <v-col cols="12" md="5" class="mt-4 mr-md-10">
               <v-text-field
                 placeholder="Ex. Natal com a familia"
                 label="Título do momento"
@@ -76,7 +98,8 @@
                 :rules="rulesObrigatorio"
               />
             </v-col>
-            <v-col cols="5" class="ml-8 mt-4">
+
+            <v-col cols="12" md="5" class="mt-4">
               <v-file-input
                 :rules="rulesFoto"
                 accept="image/png, image/jpeg, image/bmp"
@@ -88,7 +111,7 @@
               />
             </v-col>
 
-            <v-col cols="11" class="ml-2">
+            <v-col cols="12" md="11">
               <v-text-field
                 placeholder="Ex. Salve Geral"
                 label="Descrição do momento"
@@ -135,6 +158,7 @@ export default {
   data: function() {
     return {
       modalMomento: false,
+      menuLateral: false,
       rulesFoto: [
         v => !!v || "Selecione uma foto",
         v => !v || v.size < 2000000 || "A foto deve ter menos de 2 mb"
@@ -207,9 +231,10 @@ export default {
 </script>
 
 <style scoped>
-  .menu-fixed {
-    width: 100%;
-    min-height: 92vh;
+  .modal-close {
+    right: 10px;
+    top: 10px;
+    position: absolute;
   }
 
   .lista-titulo {
@@ -220,11 +245,5 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .canvas-momento {
-    border: solid 1px black;
-    width: 400px;
-    height: 400px;
   }
 </style>

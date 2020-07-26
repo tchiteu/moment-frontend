@@ -29,7 +29,7 @@ var paises = [
   'Bosnia And Herzegovina',
   'Botswana',
   'Bouvet Island',
-  'Brazil',
+  'Brasil',
   'British Indian Ocean Territory',
   'Brunei Darussalam',
   'Bulgaria',
