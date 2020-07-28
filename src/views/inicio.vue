@@ -150,6 +150,7 @@
 <script>
 import Momento from '../components/Momento.vue';
 import Logo from '../components/Logo.vue';
+import mixinGlobal from '../plugins/mixinGlobal';
 
 export default {
   name: 'inicio',
@@ -157,6 +158,7 @@ export default {
     Momento,
     Logo
   },
+  mixins: [mixinGlobal],
   data: function() {
     return {
       modalMomento: false,
@@ -212,6 +214,7 @@ export default {
       novo_momento: {
         pre_imagem: null,
         imagem: "",
+        base64: "",
         titulo: "Exemplo",
         descricao: "Descrição de exemplo, apenas isso.",
         usuario: "@matheus_santos",
@@ -222,11 +225,26 @@ export default {
     publicar() {
       if(!this.$refs.form_momento.validate()) return false;
 
-      this.$toasted.success("Passou, parabai")
+      this.$toasted.success("Passou, parabains")
+      console.log(this.novo_momento)
     },
     fotoSelecionada(foto) {
       const file = foto;
+      
+      if(!foto) { 
+        this.novo_momento.imagem = "";
+        return;
+      }
+      
       this.novo_momento.imagem = URL.createObjectURL(file);
+
+      var reader = new FileReader();
+      reader.readAsDataURL(foto); 
+
+      reader.onloadend = () => {
+        var base64data = reader.result;                
+        this.novo_momento.base64 = base64data;
+      }
     }
   }
 }
