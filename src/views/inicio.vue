@@ -225,8 +225,15 @@ export default {
     publicar() {
       if(!this.$refs.form_momento.validate()) return false;
 
-      this.$toasted.success("Passou, parabains")
-      console.log(this.novo_momento)
+      let {titulo, descricao, base64} = this.novo_momento;
+
+      const options = {
+        titulo,
+        descricao,
+        base64
+      }
+
+      this.$axios.post("/momentos", options).catch(() => false);
     },
     fotoSelecionada(foto) {
       const file = foto;
