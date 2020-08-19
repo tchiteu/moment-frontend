@@ -66,6 +66,7 @@
       </template>
     </v-navigation-drawer>
 
+    <!-- Lista de momentos -->
     <v-container fluid>
       <v-row justify="center">
         <v-col cols="12">
@@ -81,7 +82,8 @@
       </v-row>
       
     </v-container>
-
+    
+    <!-- Modal de publicação de momentos -->
     <v-dialog v-model="modalMomento" max-width="600">
       <v-card>
         <v-icon class="modal-close pa-1" @click="modalMomento = false">
@@ -208,7 +210,10 @@ export default {
         {
           titulo: "Novo Momento",
           icone: "mdi-card-plus",
-          funcao:() => this.modalMomento = !this.modalMomento
+          funcao:() => {
+            this.modalMomento = !this.modalMomento;
+            this.menuLateral = false;
+          }
         }
       ],
       novo_momento: {
@@ -240,6 +245,13 @@ export default {
         this.$toasted.success("Momento publicado!");
       }
     },
+
+    async getMomentos() {
+      const retorno = await this.$axios.get("/momentos").catch(false);
+      
+      if(retorno) console.log(retorno);
+    },
+
     fotoSelecionada(foto) {
       const file = foto;
       
@@ -258,6 +270,9 @@ export default {
         this.novo_momento.base64 = base64data;
       }
     }
+  },
+  async mounted() {
+    this.momentos = await this.getMomentos();
   }
 }
 </script>
