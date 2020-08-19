@@ -222,7 +222,7 @@ export default {
     }
   },
   methods: {
-    publicar() {
+    async publicar() {
       if(!this.$refs.form_momento.validate()) return false;
 
       let {titulo, descricao, base64} = this.novo_momento;
@@ -233,7 +233,12 @@ export default {
         base64
       }
 
-      this.$axios.post("/momentos", options).catch(() => false);
+      const retorno = await this.$axios.post("/momentos", options).catch(false);
+
+      if(retorno) {
+        this.modalMomento = false;
+        this.$toasted.success("Momento publicado!");
+      }
     },
     fotoSelecionada(foto) {
       const file = foto;
