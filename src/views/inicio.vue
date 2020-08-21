@@ -12,7 +12,7 @@
 
       <v-spacer></v-spacer>
 
-      <Logo color="#474290"/>
+      <Logo :fontSize="(mobile) ? '30px' : '42px'" color="#474290"/>
 
       <v-spacer></v-spacer>
 
@@ -21,11 +21,8 @@
       </v-btn>
     </v-app-bar>
     
-    <v-navigation-drawer
-      v-model="menuLateral"
-      fixed
-      temporary
-    >
+    <!-- Menu lateral -->
+    <v-navigation-drawer v-model="menuLateral" fixed temporary>
       <v-list>
         <v-list-item-group>
           <v-list-item inactive>
@@ -41,18 +38,26 @@
 
           <v-divider />
           
-          <v-list-item 
-            link v-for="(item, index) in menu"
-            :key="index"
-            @click="item.funcao"
-          >
+          <v-list-item link>
             <v-list-item-icon>
-              <v-icon>{{ item.icone }}</v-icon>
+              <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
               <v-list-item-title class="lista-titulo">
-                {{ item.titulo }}
+                Início
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item link @click="abreModalMomento()">
+            <v-list-item-icon>
+              <v-icon>mdi-card-plus</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title class="lista-titulo">
+                Novo momento
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -67,7 +72,7 @@
     </v-navigation-drawer>
 
     <!-- Lista de momentos -->
-    <v-container fluid>
+    <v-container fluid class="mt-md-12 mt-6">
       <v-row justify="center">
         <v-col cols="12">
           <div class="lista-momentos">
@@ -165,57 +170,14 @@ export default {
     return {
       modalMomento: false,
       menuLateral: false,
+
       rulesFoto: [
         v => !!v || "Selecione uma foto",
         v => !v || v.size < 2000000 || "A foto deve ter menos de 2 mb"
       ],
       rulesObrigatorio: [ v => !!v || "Campo obrigatório" ],
 
-      momentos:[
-        {
-          imagem: "https://source.unsplash.com/random/600x800",
-          usuario: "@matheus_santos",
-          titulo: "Foto aleatória",
-          descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
-          curtidas: 302,
-        },
-        {
-          imagem: "https://source.unsplash.com/random/600x800",
-          usuario: "@giza",
-          titulo: "Foto aleatória",
-          descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
-          curtidas: 302
-        },
-        {
-          imagem: "https://source.unsplash.com/random/600x800",
-          usuario: "@noix_guri",
-          titulo: "Foto aleatória",
-          descricao: "Uma foto aleatória, sabe? É random mesmo, vem direto da unsplash.com",
-          curtidas: 302
-        },
-      ],
-      menu: [
-        {
-          titulo: "Início",
-          icone: "mdi-home"
-        },
-        {
-          titulo: "Minha Conta",
-          icone: "mdi-account"
-        },
-        {
-          titulo: "Adicionar Amigos",
-          icone: "mdi-account-plus"
-        },
-        {
-          titulo: "Novo Momento",
-          icone: "mdi-card-plus",
-          funcao:() => {
-            this.modalMomento = !this.modalMomento;
-            this.menuLateral = false;
-          }
-        }
-      ],
+      momentos:[],
       novo_momento: {
         pre_imagem: null,
         imagem: "",
@@ -243,13 +205,25 @@ export default {
       if(retorno) {
         this.modalMomento = false;
         this.$toasted.success("Momento publicado!");
+
+        this.getMomentos();
       }
     },
 
     async getMomentos() {
-      const retorno = await this.$axios.get("/momentos").catch(false);
+      const retorno = await this.$axios.get("/momentos")
+        .catch(err => {
+          if(err) this.$toasted.error("Erro ao buscar os momentos.")
+        });
       
-      if(retorno) console.log(retorno);
+      if(retorno) {
+        this.momentos = retorno.data;
+      }
+    },
+
+    abreModalMomento() {
+      this.modalMomento = !this.modalMomento;
+      this.menuLateral = false;
     },
 
     fotoSelecionada(foto) {
@@ -271,8 +245,8 @@ export default {
       }
     }
   },
-  async mounted() {
-    this.momentos = await this.getMomentos();
+  mounted() {
+    this.getMomentos();
   }
 }
 </script>

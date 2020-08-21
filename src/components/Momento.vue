@@ -7,9 +7,9 @@
       tile
     >
       <v-img 
-        v-if="momento.imagem"
+        v-if="momento.base64"
         height="400px"
-        :src="momento.imagem"
+        :src="momento.base64"
       >
         <div :class="(mobile) ? 'momento-usuario-mobile' : 'momento-usuario'">
           {{ momento.usuario }}

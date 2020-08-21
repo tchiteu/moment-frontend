@@ -3,11 +3,17 @@ import Axios from 'axios';
 
 Vue.use(Axios);
 
-export const httpd = Axios.create({
+const httpd = Axios.create({
   baseURL: "http://localhost:3000",
   headers: {
-    Authorization: localStorage.token
-  }
-})
+    Authorization:  localStorage.getItem('token')
+  },
+});
+
+httpd.interceptors.request.use(function (config) {
+  const token = localStorage.getItem('token');
+  config.headers.Authorization =  token || '';
+  return config;
+});
 
 export default httpd;

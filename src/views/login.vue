@@ -24,6 +24,7 @@
               v-model="email"
               label="E-mail"
               placeholder=" "
+              @keyup.enter="login()"
               :rules="emailRules"
             ></v-text-field>
 
@@ -33,6 +34,7 @@
               type="password"
               placeholder=" "
               :rules="senhaRules"
+              @keyup.enter="login()"
               required
             ></v-text-field>
           </v-form>
@@ -76,7 +78,7 @@ export default {
       
       momento: {
         imagem: "https://source.unsplash.com/random/600x800",
-        usuario: "@matheus_santos"
+        usuario: "@unsplash"
       },
 
       emailRules: [
@@ -89,28 +91,41 @@ export default {
     }
   },
   methods: {
-    async login() {
+    login() {
       if(!this.$refs.form.validate()) return false; 
       this.loading = true;
 
-      const options = {
-        email: this.email,
-        senha: this.senha
-      }
+      const { email, senha } = this;
 
-      const retorno = await this.$axios.post('login', options)
-        .catch(err => {
-          let msg = err.response.data.message;
-          this.$toasted.error(msg);
-          this.loading = false;
-        });
+      const retorno = this.auth({ email, senha }).catch(err => {
+        this.$toasted.error(err.response.data.message);
+      });
       
       if(retorno) {
-        localStorage.token = retorno.data.token;
-        this.$router.push("/");
+        setTimeout(() => this.$router.push('/'), 2000);
       }
 
+
       this.loading = false;
+    },
+
+
+    // Manipulação do token (deveria ser importado de outro arquivo)
+    auth(data) {
+      const auth = new Promise ((resolve, reject) => {
+        this.$axios.post("/login", data)
+          .then(resp => {
+            const token = resp.data.token
+            localStorage.setItem('token', token)
+            resolve(resp)
+          })
+        .catch(err => {
+          localStorage.removeItem('token')
+          reject(err)
+        })
+      });
+      
+      return auth;
     }
   },
   computed: {
