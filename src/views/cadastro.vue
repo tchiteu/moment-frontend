@@ -107,7 +107,7 @@ export default {
 
       momento: {
         imagem: "https://source.unsplash.com/random/600x800",
-        usuario: "@matheus_santos"
+        usuario: "@unsplash"
       },
 
       reqRules: [v => !!v || 'Campo obrigatório.'],

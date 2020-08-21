@@ -3,10 +3,10 @@ const url = require('url');
 
 var app = express();
 
-app.use(function(req, res, next) {
-    console.log('%s %s', req.method, req.url);
-    next();
-});
+// app.use(function(req, res, next) {
+//     console.log('%s %s', req.method, req.url);
+//     next();
+// });
 
 
   const pub_dir = __dirname + '../dist';

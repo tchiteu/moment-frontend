@@ -9,24 +9,26 @@
     data: () => ({
       pages_liberadas: ["/login", "/cadastro"],
     }),
-    mounted() {
-      this.verificaToken();
+    async mounted() {
+      await this.verificaToken();
 
       this.callback();
     },
     methods: {
       async verificaToken() {
-        await this.$axios.get("/")
-          .catch(() => {
-            let redirect = true;
+        let redirect = true;
 
-            for(let page of this.pages_liberadas) {
-              if(window.location.pathname == page) {
-                redirect = false;
-              }
-            }
-          
-            if(redirect) this.$router.push("/login");
+        for(let page of this.pages_liberadas) {
+          if(window.location.pathname == page) {
+            redirect = false;
+          }
+        }
+        
+        if(redirect) await this.$axios.get("/")
+          .catch(() => {
+            this.$toasted.error("Inicie uma sessão para entrar!")
+            this.$router.push('/login');
+            return;
           })
       },
       callback() {
